@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Time Reg App</title>
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Use the correct meta names below for your web application
+         Ref: http://davidbcalhoun.com/2010/viewport-metatag
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+
+    <!-- Basic Styles -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+    <!--<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">-->
+
+    <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap-timepicker.min.css">
+
+    <!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
+
+    <!-- SmartAdmin RTL Support is under construction
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.css"> -->
+
+    <!-- We recommend you use "your_style.css" to override SmartAdmin
+         specific styles this will also ensure you retrain your customization with each SmartAdmin update.-->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/costum/style.css">
+
+    <!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp
+    <link rel="stylesheet" type="text/css" media="screen" href="css/demo.css"> -->
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+
+</head>
+<body>
+<div id="main">
+    <nav class="navbar navbar-default navbar-inverse" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!--<a class="navbar-brand" href="#">Brand</a>-->
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">Aanwezigheden KVK</a></li>
+                    <li><a href="#">Aanwezigheden de Pagadder</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+
+    <header id="header">
+
+        <span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>
+        <!-- #LEEFGROEP: leefgroep dropdown filter -->
+        <div class="leefgroep-context">
+            <span class="label">Leefgroep:</span>
+            <span class="leefgroep-selector dropdown-toggle" data-toggle="dropdown">Living 1 <i class="fa fa-angle-down"></i></span>
+
+            <!-- Suggestion: populate this list with fetch and push technique -->
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="javascript:void(0);">Living 1</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">Living 3</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">Living 4</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="javascript:void(0);"><i class="fa fa-power-off"></i> Alle leefgroepen</a>
+                </li>
+            </ul>
+            <!-- end dropdown-menu-->
+        </div>
+
+        <div class="planning-context">
+            <span class="label">Planning:</span>
+            <span class="planning-selector dropdown-toggle" data-toggle="dropdown">Hele dag <i class="fa fa-angle-down"></i></span>
+
+            <!-- Suggestion: populate this list with fetch and push technique -->
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="javascript:void(0);">Volledige dag</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">Halve dag</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">1/3 dag</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="javascript:void(0);"><i class="fa fa-power-off"></i> Alle leefgroepen</a>
+                </li>
+            </ul>
+            <!-- end dropdown-menu-->
+        </div>
+
+        <!-- pulled right: nav area -->
+        <div class="pull-right">
+            <div id="logo-group">
+                <!-- Note: The activity badge color changes when clicked and resets the number to 0
+                         Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
+            <span id="activity" class="activity-dropdown">
+                                <b class="badge first bg-color-blueDark"> 21 </b>
+                                <b class="badge second bg-color-blueDark"> 5 </b>
+
+                <i class="fa fa-user"></i></span>
+            </span>
+                <!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
+                <div class="ajax-dropdown">
+
+                    <!-- the ID links are fetched via AJAX to the ajax container "ajax-notifications" -->
+                    <div class="btn-group btn-group-justified" data-toggle="buttons">
+                        <label class="btn btn-default">
+                            <input type="radio" name="activity" id="ajax/notify/mail.html">
+                            aanwezig (10) </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="activity" id="ajax/notify/tester.html">
+                            afwezig (2) </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="activity" id="ajax/notify/test.html">
+                            binnen (5) </label>
+                    </div>
+
+                    <!-- notification content -->
+                    <div class="ajax-notifications custom-scroll">
+
+                        <div class="alert alert-transparent">
+                            <h4>Click a button to show messages here</h4>
+                        </div>
+
+                        <i class="fa fa-lock fa-4x fa-border"></i>
+
+                    </div>
+                    <!-- end notification content -->
+
+                    <!-- footer: refresh area -->
+					<span> Last updated on: 12/12/2013 9:43AM
+						<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
+                            <i class="fa fa-refresh"></i>
+                        </button> </span>
+                    <!-- end footer -->
+
+                </div>
+                <!-- END AJAX-DROPDOWN -->
+            </div>
+
+
+            <!-- search mobile button (this is hidden till mobile view port) -->
+
+            <div class="btn-header pull-right" id="search-mobile">
+                <span><a href="javascript:void(0)" title="Search"><i class="fa fa-search activity-fix"></i></a></span>
+            </div><!-- end search mobile button -->
+
+            <!-- input: search field -->
+            <form action="#ajax/search.html" class="header-search pull-right">
+                <input id="search-fld" name="param" placeholder="Zoek kinderen" type="text"> <a href="javascript:void(0);" id="cancel-search-js" title="Cancel Search">X</a>
+                <button type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+            </form><!-- end input: search field -->
+            <!-- end input: search field -->
+        </div>
+        <!-- end pulled right: nav area -->
+    </header>
+
+
+
+<div class="container-fluid">
+    <div id="content">
+        <!-- 1 thumbnail -->
+            <div class="row">
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 margin-bottom-10 thumb">
+                    <div class="childHeader girl">
+                        <h4 class="child_name">Johanna De Wint</h4>
+                    </div>
+                    <div class="well well-sm">
+                        <img class="img-responsive" src="img/kids/profile/jonas.png" />
+                    </div>
+                    <div class="childFooter">
+                        <div class="badge child bounceIn animated fast childClick">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="badge child bounceIn animated fast bg-color-red planningClick">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="widget-toolbar" role="menu">
+                            <div class="label label-success bounceIn animated">
+                                2h30m
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 margin-bottom-10 thumb">
+                    <div class="childHeader girl">
+                        <h4 class="child_name">Jonas De Wint</h4>
+                    </div>
+                    <div class="well well-sm">
+                        <img class="img-responsive" src="img/kids/profile/jonas.png" />
+                    </div>
+                    <div class="childFooter">
+                        <div class="badge child bounceIn animated fast">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="badge child bounceIn animated fast bg-color-red">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="widget-toolbar" role="menu">
+                            <div class="label bounceIn animated label-success">
+                                2h30m
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 margin-bottom-10 thumb">
+                    <div class="childHeader boy">
+                        <h4 class="child_name">Jonas De Wint</h4>
+                    </div>
+                    <div class="well well-sm">
+                        <img class="img-responsive" src="img/kids/profile/jonas.png" />
+                    </div>
+                    <div class="childFooter">
+                        <div class="badge child bounceIn animated fast">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="badge child bounceIn animated fast bg-color-red">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="widget-toolbar" role="menu">
+                            <div class="label bounceIn animated label-success">
+                                2h30m
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 margin-bottom-10 thumb">
+                    <div class="childHeader girl">
+                        <h4>Jonas De Wint</h4>
+                    </div>
+                    <div class="well well-sm">
+                        <img class="img-responsive" src="img/kids/profile/jonas.png" />
+                    </div>
+                    <div class="childFooter">
+                        <div class="badge child bounceIn animated fast">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="badge child bounceIn animated fast bg-color-red">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="widget-toolbar" role="menu">
+                            <div class="label bounceIn animated label-success">
+                                2h30m
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 margin-bottom-10 thumb">
+                    <div class="childHeader boy">
+                        <h4>Jonas De Wint</h4>
+                    </div>
+                    <div class="well well-sm">
+                        <img class="img-responsive" src="img/kids/profile/jonas.png" />
+                    </div>
+                    <div class="childFooter">
+                        <div class="badge child bounceIn animated fast">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="badge child bounceIn animated fast bg-color-red">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="widget-toolbar" role="menu">
+                            <div class="label bounceIn animated label-success">
+                                2h30m
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 margin-bottom-10 thumb">
+                    <div class="childHeader boy">
+                        <h4>Jonas De Wint</h4>
+                    </div>
+                    <div class="well well-sm">
+                        <img class="img-responsive" src="img/kids/profile/jonas.png" />
+                    </div>
+                    <div class="childFooter">
+                        <div class="badge child bounceIn animated fast">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="badge child bounceIn animated fast bg-color-red">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="widget-toolbar" role="menu">
+                            <div class="label bounceIn animated label-success">
+                                2h30m
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 margin-bottom-10 thumb">
+                    <div class="childHeader girl">
+                        <h4>Jonas De Wint</h4>
+                    </div>
+                    <div class="well well-sm">
+                        <img class="img-responsive" src="img/kids/profile/jonas.png" />
+                    </div>
+                    <div class="childFooter">
+                        <div class="badge child bounceIn animated fast">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="badge child bounceIn animated fast bg-color-red">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="widget-toolbar" role="menu">
+                            <div class="label bounceIn animated label-success">
+                                2h30m
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 margin-bottom-10 thumb">
+                    <div class="childHeader boy">
+                        <h4>Jonas De Wint</h4>
+                    </div>
+                    <div class="well well-sm">
+                        <img class="img-responsive" src="img/kids/profile/jonas.png" />
+                    </div>
+                    <div class="childFooter">
+                        <div class="badge child bounceIn animated fast">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="badge child bounceIn animated fast bg-color-red">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="widget-toolbar" role="menu">
+                            <div class="label bounceIn animated label-success">
+                                2h30m
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 margin-bottom-10 thumb">
+                    <div class="childHeader boy">
+                        <h4>Jonas De Wint</h4>
+                    </div>
+                    <div class="well well-sm">
+                        <img class="img-responsive" src="img/kids/profile/jonas.png" />
+                    </div>
+                    <div class="childFooter">
+                        <div class="badge child bounceIn animated fast">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="badge child bounceIn animated fast bg-color-red">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div class="widget-toolbar" role="menu">
+                            <div class="label bounceIn animated label-success">
+                                2h30m
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STATUS BAR -->
+            <div class="alert alert-warning fade in navbar-fixed-bottom">
+                <!-- alert-succes | alert-warning | alert-error -->
+                <button class="close" data-dismiss="alert">
+                    <i class="fa fa-upload"></i>
+                </button>
+                <i class="fa fa-info-circle"></i>
+                <strong>Satus:</strong> 10 updates pending.
+            </div>
+    </div>
+</div>
+
+    <!-- OVERLAY -->
+    <div class="childOverlay overlay animated slideInLeft fast">
+               <!-- OVERLAY HEADER-->
+                <div class="childHeader girl">
+                    <h4>Johanna De Wint</h4>
+                </div>
+                <!-- OVERLAY CONTENT -->
+                <div class="well height100">
+                    <form class="smart-form">
+                        <div class="row margin-bottom-10">
+                            <section>
+                                <label class="text_overlay big">Naam</label>
+                                <label class="input state-disabled col col-5">
+                                    <input type="text" class="input-sm" disabled="disabled" placeholder="Jonas De Wint">
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row margin-bottom-10">
+                            <section>
+                                <label class="text_overlay big">Geboortedatum</label>
+                                <label class="input state-disabled col col-5">
+                                    <input type="text" class="input-sm" disabled="disabled" placeholder="28/09/1989">
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row margin-bottom-10">
+                            <section>
+                                <label class="text_overlay big">Geslacht</label>
+                                <div class="col col-3">
+                                    <label class="checkbox state-disabled">
+                                        <input type="radio" id="sex_boy" name="radio" disabled>
+                                        <i></i>M</label>
+                                </div>
+                                <div class="col col-3">
+                                    <label class="checkbox state-disabled">
+                                        <input type="radio" id="sex_girl" name="radio" checked disabled>
+                                        <i></i>V</label>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="row">
+                            <section>
+                                <label class="text_overlay big">Adres</label>
+                                <label class="input state-disabled col col-5">
+                                    <input type="text" class="input-sm" disabled="disabled" placeholder="Mollenhoekstraat 38">
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row margin-bottom-10">
+                            <section>
+                                <label class="text_overlay big"></label>
+                                <label class="input state-disabled col col-5">
+                                    <input type="text" class="input-sm" disabled="disabled" placeholder="1790 AFFLIGEM">
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row">
+                            <section>
+                                <label class="text_overlay big">Debiteur</label>
+                                <label class="input state-disabled col col-5">
+                                    <input type="text" class="input-sm" disabled="disabled" placeholder="Begonialaan 2">
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row margin-bottom-10">
+                            <section>
+                                <label class="text_overlay big"></label>
+                                <label class="input state-disabled col col-5">
+                                    <input type="text" class="input-sm" disabled="disabled" placeholder="9300 AALST">
+                                </label>
+                            </section>
+                        </div>
+                        <div class="row right">
+                        </div>
+                    </form>
+                    <div class="hidden-xs hidden-sm">
+                        <img class="img_overlay" src="img/kids/profile/jonas.png" />
+                    </div>
+                </div>
+                <!-- OVERLAY FOOTER -->
+                <div class="childFooter no-margin-bottom">
+                    <section>
+                        <a class="close_overlay" href="javascript:void(0);"><i class="fa fa-arrow-left"></i></a>
+                    </section>
+                    <section>
+                        <a class="btn btn-primary btn-sm child_alter" href="javascript:void(0);"><i class="fa fa-cog"></i> Bewerken</a>
+                    </section>
+                    <section>
+                        <a class="btn btn-warning btn-sm child_upload" href="javascript:void(0);"><i class="fa fa-upload"></i> Nieuwe foto</a>
+                    </section>
+                </div>
+            </div>
+
+            <!-- PLANNING OVERLAY -->
+            <div class="planningOverlay overlay slideInLeft animated fast">
+                <!--OVERLAY HEADER-->
+                <div class="childHeader girl">
+                    <h4>Johanna De Wint</h4>
+                </div>
+                <!--OVErlAY CONTENT-->
+                <div class="well height100">
+                    <form class="smart-form">
+                        <div class="row margin-bottom-10">
+                            <section>
+                                <label class="text_overlay">Opvangblok</label>
+                                <label class="select col col-6">
+                                    <select class="input" id="opvang_setter">
+                                        <option value="0">-- Kies juiste opvangblok -- </option>
+                                        <option value="1">Volledige dag</option>
+                                        <option value="2">Halve dag</option>
+                                    </select> <i></i> </label>
+                            </section>
+                        </div>
+                        <div class="row">
+                            <section>
+                                <label class="text_overlay">Aanwezig</label>
+                                <label class="select col col-6">
+                                    <select class="input" id="aanwezig_setter">
+                                        <option value="0">-- Kies juiste status -- </option>
+                                        <option value="1">Aanwezig</option>
+                                        <option value="2">Wettig afwezig</option>
+                                        <option value="3">Onwettig afwezig</option
+                                        <option value="4">Onwettig afwezig - halve dag</option>
+                                    </select> <i></i> </label>
+                            </section>
+                        </div>
+                        <div class="row margin-bottom-10">
+                            <div class="input-append bootstrap-timepicker">
+                                <label class="text_overlay col col-3 col-xs-1">Uur in</label>
+                                <section>
+                                    <label class="input col col-2 col-xs-2">
+                                        <input id="timepicker_in" type="text" class="input-small">
+                                    </label>
+                                    <!--    <span class="glyphicon glyphicon-search"></span>   -->
+                                </section>
+                            </div>
+                            <div class="input-append bootstrap-timepicker col col-6 col-xs-1">
+                                <label class="text_form">Uur uit</label>
+                                <section>
+                                    <label class="input col col-3 col-xs-2">
+                                        <input id="timepicker_out" type="text" class="input-small">
+                                    </label>
+                                    <!--    <span class="add-on timepick"><i class="fa fa-clock-o"></i></span> --->
+                                </section>
+                            </div>
+                        </div>
+                        <div class="row margin-bottom-10">
+                            <section>
+                                <label class="text_overlay">Extra</label>
+                                <div class="col col-3">
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="checkbox">
+                                        <i></i>Warme maaltijd</label>
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="checkbox">
+                                        <i></i>Boete</label>
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="checkbox">
+                                        <i></i>Nog iets</label>
+                                </div>
+                                <div class="col col-3">
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="checkbox">
+                                        <i></i>Eventueel iets langer</label>
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="checkbox">
+                                        <i></i>Nog mogelijkheden?</label>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="row">
+                            <section>
+                                <label class="text_overlay">Gepland</label>
+                                <div class="col col-3">
+                                    <label class="checkbox">
+                                        <input type="radio" name="radio">
+                                        <i></i>JA</label>
+                                </div>
+                                <div class="col col-3">
+                                    <label class="checkbox">
+                                        <input type="radio" name="radio">
+                                        <i></i>NEE</label>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="row">
+                            <section>
+                                <label class="text_overlay">Opmerkingen</label>
+                                <label class="textarea"> <i class="icon-append fa fa-question-circle"></i>
+                                    <textarea class="col col-4" placeholder=""></textarea>
+                                    <b class="tooltip tooltip-top-right">
+                                        <i class="fa fa-warning txt-color-teal"></i>
+                                        Hier komen allerlei opmerkingen </b>
+                                </label>
+                            </section>
+                        </div>
+                    </form>
+
+                    <div class="hidden-xs hidden-sm">
+                        <img class="img_overlay" src="img/kids/profile/jonas.png" />
+                    </div>
+                </div>
+                <!--OVERLAY FOOTER-->
+                <div class="childFooter no-margin-bottom">
+                    <section>
+                        <a class="close_overlay" href="javascript:void(0);"><i class="fa fa-arrow-left"></i></a>
+                    </section>                    <div class="widget-toolbar" role="menu">
+                        <div class="label label-success bounceIn animated">
+                            2h30m
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+
+
+<script src="js/libs/jquery-2.0.2.min.js"></script>
+<!--<script src="//code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>-->
+<!--<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>-->
+
+<!-- JS TOUCH : include this plugin for mobile drag / drop touch events
+<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> -->
+
+
+<!-- BOOTSTRAP JS -->
+<script src="js/bootstrap/bootstrap.min.js"></script>
+
+<!-- CUSTOM NOTIFICATION -->
+<script src="js/notification/SmartNotification.min.js"></script>
+
+<!-- JARVIS WIDGETS -->
+<script src="js/smartwidgets/jarvis.widget.min.js"></script>
+
+<!-- FastClick: For mobile devices: you can disable this in app.js -->
+<script src="js/plugin/fastclick/fastclick.js"></script>
+
+<!-- overlay -->
+<script src="js/jquery.plainmodal.min.js"></script>
+<!-- timepicker -->
+<script src="js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+
+<!-- MAIN APP JS FILE -->
+<script src="js/app.js"></script>
+
+<!-- Your GOOGLE ANALYTICS CODE Below -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+<script type="text/javascript">
+
+    $(function(){
+        // Bind the swiperightHandler callback function to the swipe event on div.box
+        $( ".overlay" ).on( "swiperight", swiperightHandler );
+
+        // Callback function references the event target and adds the 'swiperight' class to it
+        function swiperightHandler( event ){
+            console.log("test");
+            $(".childOverlay").css({"display":"none"});
+            $(".planningOverlay").css({"display":"none"});
+            $('body').css({"position":"relative"});
+        }
+    });
+
+
+    jQuery(function($) {
+        pageSetUp();
+
+        $( ".childClick" ).click(function() {
+            //parameter mee geven --> met id van kind juiste inhoud opvragen en invullen (div childOverlay genereren)
+            var vph = $(window).height() - 125;
+            if ($(window).width() < 768){
+                vph = $(window).height() - 125;
+                $(".height100").css({"overflow":"scroll"});
+            }
+            var vpw = $(window).width();
+            $(".childOverlay").css({"display":"block", "width":vpw + "px"});
+            $(".height100").css({"height":vph + "px"});
+
+            $(".close_overlay").click({param1: "child"}, closeWindow);
+            $('body').css({"position":"fixed"});
+        });
+        function closeWindow(event){
+
+            if (event.data.param1 == "child"){
+                $( ".childOverlay" ).animate({
+                    left: "-60%"
+                }, 200, function() {
+                    $(".childOverlay").css({"display":"none", "left": "0"});
+
+                });
+                //$(".childOverlay").css({"display":"none"});
+            }else{
+                $( ".planningOverlay" ).animate({
+                    left: "-60%"
+                }, 200, function() {
+                    $(".planningOverlay").css({"display":"none", "left": "0"});
+                });
+            };
+            //fixed uitschakelen zodat scroll weer werkt
+
+            $('body').css({"position":"relative"});
+        }
+        $( ".planningClick" ).click(function() {
+            //parameter mee geven --> met id van kind juiste inhoud opvragen en invullen (div planningOverlay genereren)
+            var vph = $(window).height() - 125;
+            if ($(window).width() < 768){
+                vph = $(window).height() - 125;
+                $(".height100").css({"overflow":"scroll"});
+            }
+            var vpw = $(window).width();
+            $(".planningOverlay").css({"display":"block", "width":vpw + "px"});
+            $(".height100").css({"height":vph + "px"});
+
+            $('body').css({"position":"fixed"});
+            $(".close_overlay").click({param1: "planning"}, closeWindow);
+
+        });
+
+        $('#timepicker_in').timepicker({
+            defaultTime: "current",
+            showMeridian: false
+        });
+        $('#timepicker_out').timepicker({
+            defaultTime: "current",
+            showMeridian: false
+        });
+
+        $(".child_alter").click(function() {
+            $(".smart-form :input").removeAttr('disabled');
+            $('.child_alter').html('<i class="fa fa-check"></i> Opslaan')
+            .addClass('btn-success').removeClass('btn-default');
+
+            //Aanpassen kind (in childOverlay)
+        });
+
+        $(".child_upload").click(function() {
+            //Uploaden nieuwe kind foto!
+        });
+
+        });
+</script>
+</body>
+</html>
